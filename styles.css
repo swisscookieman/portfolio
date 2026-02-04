@@ -1,0 +1,120 @@
+:root {
+  --bg: #ffffff;
+  --text: #000000;
+  --max: 1100px;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+}
+
+.header {
+  max-width: var(--max);
+  margin: 48px auto 24px;
+  padding: 0 20px;
+}
+
+.title {
+  font-size: 22px;
+  font-weight: 600;
+  margin: 0;
+  letter-spacing: 0.2px;
+}
+
+.subtitle {
+  margin: 8px 0 0;
+  font-size: 14px;
+}
+
+.wrap {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 0 20px 60px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 28px;
+}
+
+@media (min-width: 720px) {
+  .grid { grid-template-columns: 1fr 1fr; }
+}
+
+@media (min-width: 1020px) {
+  .grid { grid-template-columns: 1fr 1fr 1fr; }
+}
+
+.card {
+  margin: 0;
+}
+
+.card img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.caption {
+  margin-top: 10px;
+  font-size: 13px;
+  line-height: 1.35;
+}
+
+.footer {
+  max-width: var(--max);
+  margin: 0 auto 40px;
+  padding: 0 20px;
+  font-size: 12px;
+}
+/* Lightbox */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+  padding: 40px 20px;
+  z-index: 999;
+}
+
+.lightbox.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.lightbox img {
+  max-width: 95vw;
+  max-height: 80vh;
+  object-fit: contain;
+}
+
+.lightbox p {
+  margin-top: 16px;
+  font-size: 14px;
+  max-width: 70ch;
+  text-align: center;
+}
+
+.lightbox-close {
+  position: absolute;
+  top: 20px;
+  right: 24px;
+  font-size: 32px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  line-height: 1;
+}

@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hendrik van Doorn | Portfolio</title>
+    <meta name="description" content="Drone photography portfolio of Hendrik van Doorn." />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+
+  <body>
+    <header class="header">
+      <h1 class="title">Hendrik van Doorn</h1>
+      <p class="subtitle">Portfolio</p>
+    </header>
+
+    <main class="wrap">
+      <section id="grid" class="grid" aria-label="Photo gallery"></section>
+    </main>
+
+    <footer class="footer">
+      <p>© <span id="year"></span> Hendrik van Doorn</p>
+    </footer>
+
+        <!-- Lightbox -->
+    <div id="lightbox" class="lightbox">
+        <button class="lightbox-close">×</button>
+        <img id="lightbox-img" />
+        <p id="lightbox-caption"></p>
+    </div>
+
+
+    <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    const lightbox = document.getElementById("lightbox");
+    const lightboxImg = document.getElementById("lightbox-img");
+    const lightboxCaption = document.getElementById("lightbox-caption");
+    const closeBtn = document.querySelector(".lightbox-close");
+
+    function openLightbox(src, caption) {
+        lightboxImg.src = src;
+        lightboxCaption.textContent = caption || "";
+        lightbox.classList.add("open");
+        document.body.style.overflow = "hidden";
+    }
+
+    function closeLightbox() {
+        lightbox.classList.remove("open");
+        document.body.style.overflow = "";
+    }
+
+    closeBtn.addEventListener("click", closeLightbox);
+    lightbox.addEventListener("click", (e) => {
+        if (e.target === lightbox) closeLightbox();
+    });
+
+    document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") closeLightbox();
+    });
+
+    async function loadGallery() {
+        const res = await fetch("./gallery.json", { cache: "no-store" });
+        const items = await res.json();
+        const grid = document.getElementById("grid");
+
+        for (const item of items) {
+        const figure = document.createElement("figure");
+        figure.className = "card";
+
+        const img = document.createElement("img");
+        img.src = item.src;
+        img.loading = "lazy";
+
+        img.addEventListener("click", () =>
+            openLightbox(item.src, item.caption)
+        );
+
+        figure.appendChild(img);
+        grid.appendChild(figure);
+        }
+    }
+
+    loadGallery();
+    </script>
+
+
+  </body>
+</html>
