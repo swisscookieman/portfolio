@@ -31,58 +31,65 @@
 
 
     <script>
-    document.getElementById("year").textContent = new Date().getFullYear();
+      document.getElementById("year").textContent = new Date().getFullYear();
 
-    const lightbox = document.getElementById("lightbox");
-    const lightboxImg = document.getElementById("lightbox-img");
-    const lightboxCaption = document.getElementById("lightbox-caption");
-    const closeBtn = document.querySelector(".lightbox-close");
+      const lightbox = document.getElementById("lightbox");
+      const lightboxImg = document.getElementById("lightbox-img");
+      const lightboxCaption = document.getElementById("lightbox-caption");
+      const closeBtn = document.querySelector(".lightbox-close");
 
-    function openLightbox(src, caption) {
-        lightboxImg.src = src;
+      function getThumbPath(fullPath) {
+        return fullPath.replace(/(\.[^.]+)$/, "_thumb$1");
+      }
+
+      function openLightbox(fullSrc, caption) {
+        lightboxImg.src = fullSrc; // full image loads ONLY now
         lightboxCaption.textContent = caption || "";
         lightbox.classList.add("open");
         document.body.style.overflow = "hidden";
-    }
+      }
 
-    function closeLightbox() {
+      function closeLightbox() {
         lightbox.classList.remove("open");
         document.body.style.overflow = "";
-    }
+        lightboxImg.src = "";
+      }
 
-    closeBtn.addEventListener("click", closeLightbox);
-    lightbox.addEventListener("click", (e) => {
+      closeBtn.addEventListener("click", closeLightbox);
+      lightbox.addEventListener("click", (e) => {
         if (e.target === lightbox) closeLightbox();
-    });
-
-    document.addEventListener("keydown", (e) => {
+      });
+      document.addEventListener("keydown", (e) => {
         if (e.key === "Escape") closeLightbox();
-    });
+      });
 
-    async function loadGallery() {
+      async function loadGallery() {
         const res = await fetch("./gallery.json", { cache: "no-store" });
         const items = await res.json();
         const grid = document.getElementById("grid");
+        grid.innerHTML = "";
 
         for (const item of items) {
-        const figure = document.createElement("figure");
-        figure.className = "card";
+          const figure = document.createElement("figure");
+          figure.className = "card";
 
-        const img = document.createElement("img");
-        img.src = item.src;
-        img.loading = "lazy";
+          const img = document.createElement("img");
+          img.src = getThumbPath(item.src); // ✅ thumbnail inferred
+          img.loading = "lazy";
+          img.decoding = "async";
 
-        img.addEventListener("click", () =>
+          img.addEventListener("click", () =>
             openLightbox(item.src, item.caption)
-        );
+          );
 
-        figure.appendChild(img);
-        grid.appendChild(figure);
+          figure.appendChild(img);
+          grid.appendChild(figure);
         }
-    }
+      }
 
-    loadGallery();
+      loadGallery();
     </script>
+
 
 
   </body>
